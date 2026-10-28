@@ -1,8 +1,12 @@
 const fs = require("node:fs");
 const path = require("node:path");
+const os = require("node:os");
 const { DatabaseSync } = require("node:sqlite");
 
-const configuredPath = process.env.DB_PATH || path.join(__dirname, "mastersolutions.db");
+const defaultDatabasePath = process.env.VERCEL
+  ? path.join(os.tmpdir(), "mastersolutions.db")
+  : path.join(__dirname, "mastersolutions.db");
+const configuredPath = process.env.DB_PATH || defaultDatabasePath;
 const databasePath = path.resolve(configuredPath);
 
 fs.mkdirSync(path.dirname(databasePath), { recursive: true });

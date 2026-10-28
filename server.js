@@ -1,5 +1,6 @@
 const fs = require("node:fs");
 const path = require("node:path");
+const { randomBytes } = require("node:crypto");
 
 const envPath = path.join(__dirname, ".env");
 if (fs.existsSync(envPath)) {
@@ -11,10 +12,22 @@ const session = require("express-session");
 
 const app = express();
 const port = process.env.PORT || 3000;
-const sessionSecret = process.env.SESSION_SECRET;
+const sessionSecret = process.env.SESSION_SECRET || (
+  process.env.VERCEL ? randomBytes(32).toString("hex") : null
+);
 
 if (!sessionSecret) {
   throw new Error("SESSION_SECRET must be set in the environment or .env file.");
+}
+
+if (process.env.VERCEL) {
+  app.set("trust proxy", 1);
+  if (!process.env.SESSION_SECRET) {
+    console.warn("SESSION_SECRET is not configured; sessions will reset when the Vercel function restarts.");
+  }
+  if (!process.env.DB_PATH) {
+    console.warn("Using a temporary SQLite database on Vercel; data will not persist across function restarts.");
+  }
 }
 
 app.set("view engine", "ejs");
