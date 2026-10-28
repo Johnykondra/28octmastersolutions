@@ -1,0 +1,42 @@
+<%- include("partials/header", { title }) %>
+    <main id="main-content" class="store-page">
+      <section class="store-products-section product-detail-section">
+        <div class="container">
+          <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+            <a href="/shop">Shop</a>
+            <i class="bi bi-chevron-right" aria-hidden="true"></i>
+            <a href="/shop?category=<%= encodeURIComponent(product.category) %>"><%= product.category %></a>
+            <i class="bi bi-chevron-right" aria-hidden="true"></i>
+            <span aria-current="page"><%= product.name %></span>
+          </nav>
+          <% if (notice) { %>
+            <div class="alert store-alert alert-<%= notice.type %>" role="status"><%= notice.message %></div>
+          <% } %>
+          <article class="product-detail">
+            <div class="product-detail-image-wrap">
+              <img src="<%= product.imageUrl %>" alt="<%= product.name %>" />
+            </div>
+            <div class="product-detail-content">
+              <span class="eyebrow eyebrow-dark"><%= product.category %></span>
+              <span class="product-brand"><%= product.brand %></span>
+              <h1><%= product.name %></h1>
+              <p class="product-detail-specs"><%= product.specs %></p>
+              <div class="product-stock <%= product.stock > 0 ? "in-stock" : "out-of-stock" %>">
+                <span class="stock-dot" aria-hidden="true"></span>
+                <%= product.stock > 0 ? `In stock · ${product.stock} available` : "Out of stock" %>
+              </div>
+              <p class="product-detail-price"><%= formatPrice(product.priceFils) %></p>
+              <form action="/cart/add/<%= product.id %>" method="post">
+                <button class="btn btn-accent btn-lg product-add-button" type="submit" <%= product.stock < 1 ? "disabled" : "" %>>
+                  <i class="bi bi-cart-plus" aria-hidden="true"></i> Add to cart
+                </button>
+              </form>
+              <a class="back-to-shop" href="/shop?category=<%= encodeURIComponent(product.category) %>">
+                <i class="bi bi-arrow-left" aria-hidden="true"></i> Continue shopping
+              </a>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+<%- include("partials/footer") %>

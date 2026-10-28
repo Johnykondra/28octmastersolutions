@@ -1,0 +1,50 @@
+<%- include("partials/header", { title }) %>
+    <main id="main-content" class="account-page">
+      <div class="container">
+        <section class="order-result-card">
+          <% if (paymentConfirmed) { %>
+            <span class="order-result-icon order-result-success"><i class="bi bi-check-lg" aria-hidden="true"></i></span>
+            <span class="eyebrow eyebrow-dark">PAYMENT CONFIRMED</span>
+            <h1>Thank you for your order.</h1>
+            <p>Your payment has been received and the order is confirmed.</p>
+            <div class="order-number-panel">
+              <span>Order number</span>
+              <strong><%= order.orderNumber %></strong>
+              <span><%= formatPrice(order.totalFils) %> · <%= order.deliveryMethod === "pickup" ? "Pick up in store" : "Delivery within Fujairah" %></span>
+            </div>
+            <p class="order-result-followup">We’ll use <strong><%= order.customerEmail %></strong> and <strong><%= order.customerPhone %></strong> for order updates.</p>
+          <% } else if (unavailable && order) { %>
+            <span class="order-result-icon order-result-pending"><i class="bi bi-exclamation-lg" aria-hidden="true"></i></span>
+            <span class="eyebrow eyebrow-dark">PAYMENT NEEDS REVIEW</span>
+            <h1>We’re checking your order.</h1>
+            <p>Payment may have been received, but we couldn’t complete the order automatically. Please contact the shop before placing the order again.</p>
+            <div class="order-number-panel">
+              <span>Order number</span>
+              <strong><%= order.orderNumber %></strong>
+            </div>
+          <% } else if (order) { %>
+            <span class="order-result-icon order-result-pending"><i class="bi bi-clock-history" aria-hidden="true"></i></span>
+            <span class="eyebrow eyebrow-dark">PAYMENT NOT COMPLETED</span>
+            <h1>Your order is still pending.</h1>
+            <p>Stripe has not confirmed payment, so your order has not been completed and product stock has not changed.</p>
+            <div class="order-number-panel">
+              <span>Order number</span>
+              <strong><%= order.orderNumber %></strong>
+              <span>Status: <%= order.status %></span>
+            </div>
+          <% } else { %>
+            <span class="order-result-icon order-result-pending"><i class="bi bi-info-lg" aria-hidden="true"></i></span>
+            <span class="eyebrow eyebrow-dark">PAYMENT NOT VERIFIED</span>
+            <h1>We couldn’t verify this order.</h1>
+            <p><%= unavailable ? "The payment provider is temporarily unavailable. Please try again shortly." : "This payment session could not be matched to an order. No order has been confirmed." %></p>
+          <% } %>
+          <div class="order-result-actions">
+            <a class="btn btn-accent" href="/shop">Continue shopping</a>
+            <% if (currentUser) { %>
+              <a class="btn btn-outline-primary" href="/account?tab=orders">View my orders</a>
+            <% } %>
+          </div>
+        </section>
+      </div>
+    </main>
+<%- include("partials/footer") %>

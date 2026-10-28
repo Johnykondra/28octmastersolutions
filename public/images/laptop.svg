@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="title desc">
+  <title id="title">Laptop illustration</title>
+  <desc id="desc">A slim blue-lit laptop shown open at an angle.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#132944"/>
+      <stop offset="1" stop-color="#0b1728"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#2779b8"/>
+      <stop offset=".58" stop-color="#183d62"/>
+      <stop offset="1" stop-color="#102238"/>
+    </linearGradient>
+    <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#c5d7e8"/>
+      <stop offset="1" stop-color="#647d96"/>
+    </linearGradient>
+    <radialGradient id="glow">
+      <stop stop-color="#14b8a6" stop-opacity=".24"/>
+      <stop offset="1" stop-color="#14b8a6" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="640" height="360" rx="20" fill="url(#background)"/>
+  <circle cx="320" cy="170" r="165" fill="url(#glow)"/>
+  <path d="M176 75q0-12 13-12h258q13 0 13 12v165H176z" fill="#7289a2"/>
+  <path d="M185 75q0-5 6-5h254q6 0 6 5v151H185z" fill="#091522"/>
+  <path d="M198 84h240v132H198z" fill="url(#screen)"/>
+  <path d="M198 216h240v-29c-32 31-87 43-151 34-36-5-65-5-89-1z" fill="#14b8a6" opacity=".23"/>
+  <path d="M197 105h68" stroke="#5eead4" stroke-linecap="round" stroke-width="4" opacity=".75"/>
+  <path d="M197 118h43" stroke="#5eead4" stroke-linecap="round" stroke-width="3" opacity=".38"/>
+  <circle cx="316" cy="76" r="2" fill="#d1e4f5"/>
+  <path d="M124 250h392l-41 22H164z" fill="url(#metal)"/>
+  <path d="M214 251h214l-17 10H231z" fill="#7690a9"/>
+  <path d="M302 266h37l9 5h-55z" fill="#435a72"/>
+  <path d="M120 275h400" stroke="#14b8a6" stroke-linecap="round" stroke-width="3" opacity=".8"/>
+  <ellipse cx="320" cy="296" rx="190" ry="13" fill="#000" opacity=".25"/>
+</svg>

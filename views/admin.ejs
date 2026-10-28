@@ -1,0 +1,98 @@
+<%- include("partials/header", { title }) %>
+    <main id="main-content" class="account-page admin-page">
+      <div class="container">
+        <div class="account-heading">
+          <div>
+            <span class="eyebrow eyebrow-dark">MASTER SOLUTIONS ADMIN</span>
+            <h1>Admin Dashboard</h1>
+            <p>Manage repair requests and keep customers updated.</p>
+          </div>
+          <span class="admin-user-label"><i class="bi bi-shield-check" aria-hidden="true"></i> <%= currentUser.email %></span>
+        </div>
+
+        <% if (notice) { %>
+          <div class="alert alert-<%= notice.type %>" role="status"><%= notice.message %></div>
+        <% } %>
+
+        <section class="admin-summary-grid" aria-label="Repair ticket summary">
+          <article class="admin-summary-card">
+            <span class="admin-summary-label">All tickets</span>
+            <strong><%= counts.total %></strong>
+          </article>
+          <article class="admin-summary-card">
+            <span class="admin-summary-label">Received</span>
+            <strong><%= counts.received %></strong>
+          </article>
+          <article class="admin-summary-card">
+            <span class="admin-summary-label">In progress</span>
+            <strong><%= counts.inProgress %></strong>
+          </article>
+          <article class="admin-summary-card">
+            <span class="admin-summary-label">Ready for pickup</span>
+            <strong><%= counts.readyForPickup %></strong>
+          </article>
+        </section>
+
+        <section class="account-panel admin-ticket-panel" aria-labelledby="adminTicketsHeading">
+          <div class="account-panel-heading">
+            <div>
+              <h2 id="adminTicketsHeading">Repair tickets</h2>
+              <p>Newest requests appear first. Updating a status is visible in the customer’s account.</p>
+            </div>
+            <span class="account-count"><%= tickets.length %> <%= tickets.length === 1 ? "ticket" : "tickets" %></span>
+          </div>
+          <% if (tickets.length) { %>
+            <div class="table-responsive">
+              <table class="table account-ticket-table admin-ticket-table align-middle">
+                <thead>
+                  <tr>
+                    <th scope="col">Ticket</th>
+                    <th scope="col">Customer</th>
+                    <th scope="col">Device &amp; service</th>
+                    <th scope="col">Received</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Update status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% tickets.forEach((ticket) => {
+                    const statusClass = ticket.status === "Completed" ? "status-completed"
+                      : ticket.status === "Cancelled" ? "status-cancelled"
+                      : ticket.status === "Ready for Pickup" ? "status-ready"
+                      : ticket.status === "In Progress" ? "status-progress"
+                      : ticket.status === "Waiting for Parts" ? "status-waiting"
+                      : "status-received";
+                  %>
+                    <tr>
+                      <th scope="row"><%= ticket.ticketNumber %></th>
+                      <td><strong><%= ticket.customerName %></strong><br /><span class="admin-customer-email"><%= ticket.customerEmail %></span></td>
+                      <td><strong><%= ticket.device %></strong><br /><span class="admin-customer-email"><%= ticket.service %></span></td>
+                      <td><%= new Date(`${ticket.createdAt.replace(" ", "T")}Z`).toLocaleString("en-AE", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Dubai" }) %></td>
+                      <td><span class="ticket-status <%= statusClass %>"><%= ticket.status %></span></td>
+                      <td>
+                        <form class="admin-status-form" action="/admin/tickets/<%= encodeURIComponent(ticket.ticketNumber) %>/status" method="post">
+                          <label class="visually-hidden" for="status-<%= ticket.ticketNumber %>">Status for ticket <%= ticket.ticketNumber %></label>
+                          <select class="form-select form-select-sm" id="status-<%= ticket.ticketNumber %>" name="status">
+                            <% statuses.forEach((status) => { %>
+                              <option value="<%= status %>" <%= ticket.status === status ? "selected" : "" %>><%= status %></option>
+                            <% }); %>
+                          </select>
+                          <button class="btn btn-sm btn-accent" type="submit">Save</button>
+                        </form>
+                      </td>
+                    </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+            </div>
+          <% } else { %>
+            <div class="account-empty">
+              <span class="account-empty-icon"><i class="bi bi-inbox" aria-hidden="true"></i></span>
+              <h3>No repair tickets yet</h3>
+              <p>New customer repair requests will appear here.</p>
+            </div>
+          <% } %>
+        </section>
+      </div>
+    </main>
+<%- include("partials/footer") %>

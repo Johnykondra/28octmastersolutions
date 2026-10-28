@@ -1,0 +1,27 @@
+<%- include("partials/header", { title }) %>
+    <main id="main-content" class="account-page">
+      <div class="container">
+        <section class="auth-card">
+          <span class="eyebrow eyebrow-dark">WELCOME BACK</span>
+          <h1>Login</h1>
+          <p>Sign in to view your account and repair requests.</p>
+          <% if (error) { %>
+            <div class="alert alert-danger" role="alert"><%= error %></div>
+          <% } %>
+          <form action="/login" method="post" class="auth-form">
+            <input type="hidden" name="next" value="<%= nextPath %>" />
+            <div class="mb-3">
+              <label class="form-label" for="loginEmail">Email</label>
+              <input class="form-control" id="loginEmail" name="email" type="email" value="<%= email %>" maxlength="254" autocomplete="email" required />
+            </div>
+            <div class="mb-4">
+              <label class="form-label" for="loginPassword">Password</label>
+              <input class="form-control" id="loginPassword" name="password" type="password" autocomplete="current-password" required />
+            </div>
+            <button class="btn btn-accent auth-submit" type="submit">Login</button>
+          </form>
+          <p class="auth-switch">New to Master Solutions? <a href="/register<%= nextPath === "/account" ? "" : `?next=${encodeURIComponent(nextPath)}` %>">Create an account</a></p>
+        </section>
+      </div>
+    </main>
+<%- include("partials/footer") %>

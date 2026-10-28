@@ -1,0 +1,36 @@
+<%- include("partials/header", { title }) %>
+    <main id="main-content" class="account-page">
+      <div class="container">
+        <section class="auth-card">
+          <span class="eyebrow eyebrow-dark">CREATE YOUR ACCOUNT</span>
+          <h1>Register</h1>
+          <p>Sign up to keep track of your repair requests and account.</p>
+          <% if (error) { %>
+            <div class="alert alert-danger" role="alert"><%= error %></div>
+          <% } %>
+          <form action="/register" method="post" class="auth-form">
+            <input type="hidden" name="next" value="<%= nextPath %>" />
+            <div class="mb-3">
+              <label class="form-label" for="registerName">Full name</label>
+              <input class="form-control" id="registerName" name="name" type="text" value="<%= name %>" maxlength="100" autocomplete="name" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="registerEmail">Email</label>
+              <input class="form-control" id="registerEmail" name="email" type="email" value="<%= email %>" maxlength="254" autocomplete="email" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="registerPassword">Password</label>
+              <input class="form-control" id="registerPassword" name="password" type="password" minlength="8" maxlength="72" autocomplete="new-password" required />
+              <div class="form-text">Use 8–72 characters.</div>
+            </div>
+            <div class="mb-4">
+              <label class="form-label" for="confirmPassword">Confirm password</label>
+              <input class="form-control" id="confirmPassword" name="confirmPassword" type="password" minlength="8" maxlength="72" autocomplete="new-password" required />
+            </div>
+            <button class="btn btn-accent auth-submit" type="submit">Create account</button>
+          </form>
+          <p class="auth-switch">Already registered? <a href="/login<%= nextPath === "/account" ? "" : `?next=${encodeURIComponent(nextPath)}` %>">Log in</a></p>
+        </section>
+      </div>
+    </main>
+<%- include("partials/footer") %>

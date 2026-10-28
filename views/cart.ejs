@@ -1,0 +1,63 @@
+<%- include("partials/header", { title }) %>
+    <main id="main-content" class="store-page">
+      <section class="store-products-section cart-page-section">
+        <div class="container">
+          <div class="cart-page-heading">
+            <div>
+              <span class="eyebrow eyebrow-dark">YOUR SELECTION</span>
+              <h1>Your cart</h1>
+            </div>
+            <a class="back-to-shop" href="/shop"><i class="bi bi-arrow-left" aria-hidden="true"></i> Continue shopping</a>
+          </div>
+          <% if (notice) { %>
+            <div class="alert store-alert alert-<%= notice.type %>" role="status"><%= notice.message %></div>
+          <% } %>
+          <% if (items.length) { %>
+            <div class="cart-layout">
+              <div class="cart-items">
+                <% items.forEach(({ product, quantity, lineTotal }) => { %>
+                  <article class="cart-item">
+                    <a class="cart-item-image" href="/shop/<%= product.id %>" tabindex="-1" aria-hidden="true">
+                      <img src="<%= product.imageUrl %>" alt="" loading="lazy" />
+                    </a>
+                    <div class="cart-item-info">
+                      <span class="product-brand"><%= product.brand %> · <%= product.category %></span>
+                      <h2><a href="/shop/<%= product.id %>"><%= product.name %></a></h2>
+                      <p><%= product.specs %></p>
+                      <form class="cart-quantity-form" action="/cart/update/<%= product.id %>" method="post" aria-label="Change quantity for <%= product.name %>">
+                        <button class="quantity-button" type="submit" name="delta" value="-1" aria-label="Decrease quantity">−</button>
+                        <span class="quantity-value" aria-label="Quantity"><%= quantity %></span>
+                        <button class="quantity-button" type="submit" name="delta" value="1" aria-label="Increase quantity" <%= quantity >= product.stock ? "disabled" : "" %>>+</button>
+                      </form>
+                    </div>
+                    <div class="cart-item-total">
+                      <strong><%= formatPrice(lineTotal) %></strong>
+                      <span><%= formatPrice(product.priceFils) %> each</span>
+                      <form action="/cart/remove/<%= product.id %>" method="post">
+                        <button class="remove-item-button" type="submit"><i class="bi bi-trash3" aria-hidden="true"></i> Remove</button>
+                      </form>
+                    </div>
+                  </article>
+                <% }); %>
+              </div>
+              <aside class="cart-summary">
+                <h2>Order summary</h2>
+                <div class="cart-summary-line"><span>Subtotal</span><strong><%= formatPrice(cartTotal) %></strong></div>
+                <div class="cart-summary-line cart-total"><span>Total</span><strong><%= formatPrice(cartTotal) %></strong></div>
+                <p class="vat-note"><i class="bi bi-check-circle" aria-hidden="true"></i> Prices include 5% VAT.</p>
+                <a class="btn btn-accent cart-continue-button" href="/checkout">Proceed to checkout</a>
+                <a class="btn btn-accent cart-continue-button" href="/shop">Continue shopping</a>
+              </aside>
+            </div>
+          <% } else { %>
+            <div class="empty-store cart-empty">
+              <span class="empty-store-icon"><i class="bi bi-cart3" aria-hidden="true"></i></span>
+              <h2>Your cart is empty</h2>
+              <p>Explore computers, servers and accessories to get started.</p>
+              <a class="btn btn-accent" href="/shop">Browse the shop</a>
+            </div>
+          <% } %>
+        </div>
+      </section>
+    </main>
+<%- include("partials/footer") %>

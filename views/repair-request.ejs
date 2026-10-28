@@ -1,0 +1,45 @@
+<%- include("partials/header", { title }) %>
+    <main id="main-content" class="account-page">
+      <div class="container">
+        <section class="repair-form-card">
+          <span class="eyebrow eyebrow-dark">REPAIR BOOKING</span>
+          <h1>Tell us what needs fixing.</h1>
+          <p>Submit your details and our team will follow up to confirm the repair and pricing.</p>
+          <% if (error) { %>
+            <div class="alert alert-danger" role="alert"><%= error %></div>
+          <% } %>
+          <% if (submitted) { %>
+            <div class="alert alert-success" role="status">Your repair request has been received.</div>
+          <% } %>
+          <form action="/repairs" method="post" class="repair-request-form">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label" for="repairName">Full name</label>
+                <input class="form-control" id="repairName" name="name" type="text" value="<%= form.name %>" maxlength="100" autocomplete="name" readonly required />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="repairEmail">Email</label>
+                <input class="form-control" id="repairEmail" name="email" type="email" value="<%= form.email %>" maxlength="254" autocomplete="email" readonly required />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="repairDevice">Device</label>
+                <select class="form-select" id="repairDevice" name="device" required>
+                  <option value="" disabled <%= form.device ? "" : "selected" %>>Choose device type</option>
+                  <% ["Laptop", "Desktop", "Server", "Other"].forEach((device) => { %>
+                    <option value="<%= device %>" <%= form.device === device ? "selected" : "" %>><%= device %></option>
+                  <% }); %>
+                </select>
+              </div>
+              <div class="col-12">
+                <label class="form-label" for="repairService">Service needed</label>
+                <textarea class="form-control" id="repairService" name="service" rows="4" maxlength="200" placeholder="Describe the issue or service you need" required><%= form.service %></textarea>
+              </div>
+              <div class="col-12">
+                <button class="btn btn-accent btn-lg" type="submit"><i class="bi bi-send" aria-hidden="true"></i> Submit repair request</button>
+              </div>
+            </div>
+          </form>
+        </section>
+      </div>
+    </main>
+<%- include("partials/footer") %>

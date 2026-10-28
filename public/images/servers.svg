@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="title desc">
+  <title id="title">Server rack illustration</title>
+  <desc id="desc">A pair of neatly arranged rack servers with blue status lights.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#132944"/>
+      <stop offset="1" stop-color="#0b1728"/>
+    </linearGradient>
+    <linearGradient id="rack" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#192b41"/>
+      <stop offset=".5" stop-color="#344b64"/>
+      <stop offset="1" stop-color="#17283c"/>
+    </linearGradient>
+    <radialGradient id="glow">
+      <stop stop-color="#14b8a6" stop-opacity=".25"/>
+      <stop offset="1" stop-color="#14b8a6" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="640" height="360" rx="20" fill="url(#background)"/>
+  <circle cx="320" cy="174" r="180" fill="url(#glow)"/>
+  <rect x="169" y="43" width="302" height="278" rx="13" fill="url(#rack)" stroke="#8195aa" stroke-width="2"/>
+  <rect x="185" y="57" width="270" height="248" rx="6" fill="#0c1726"/>
+  <g fill="#20354b" stroke="#526982" stroke-width="1.5">
+    <rect x="198" y="72" width="244" height="48" rx="5"/>
+    <rect x="198" y="130" width="244" height="48" rx="5"/>
+    <rect x="198" y="188" width="244" height="48" rx="5"/>
+    <rect x="198" y="246" width="244" height="45" rx="5"/>
+  </g>
+  <g fill="#0e1a2a" stroke="#526982" stroke-width="1">
+    <rect x="215" y="84" width="73" height="24" rx="3"/>
+    <rect x="215" y="142" width="73" height="24" rx="3"/>
+    <rect x="215" y="200" width="73" height="24" rx="3"/>
+    <rect x="215" y="256" width="73" height="24" rx="3"/>
+  </g>
+  <g fill="#7590aa">
+    <circle cx="229" cy="96" r="3"/><circle cx="239" cy="96" r="3"/><circle cx="249" cy="96" r="3"/>
+    <circle cx="229" cy="154" r="3"/><circle cx="239" cy="154" r="3"/><circle cx="249" cy="154" r="3"/>
+    <circle cx="229" cy="212" r="3"/><circle cx="239" cy="212" r="3"/><circle cx="249" cy="212" r="3"/>
+    <circle cx="229" cy="268" r="3"/><circle cx="239" cy="268" r="3"/><circle cx="249" cy="268" r="3"/>
+  </g>
+  <g fill="#14b8a6">
+    <circle cx="418" cy="88" r="3"/><circle cx="418" cy="99" r="3"/>
+    <circle cx="418" cy="146" r="3"/><circle cx="418" cy="157" r="3"/>
+    <circle cx="418" cy="204" r="3"/><circle cx="418" cy="215" r="3"/>
+    <circle cx="418" cy="261" r="3"/><circle cx="418" cy="272" r="3"/>
+  </g>
+  <path d="M177 66v230M463 66v230" stroke="#9bb0c6" stroke-width="2" opacity=".55"/>
+  <ellipse cx="320" cy="331" rx="190" ry="9" fill="#000" opacity=".22"/>
+</svg>

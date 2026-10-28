@@ -1,0 +1,80 @@
+<%- include("partials/header", { title }) %>
+    <main id="main-content" class="account-page checkout-page">
+      <div class="container">
+        <div class="account-heading">
+          <div>
+            <span class="eyebrow eyebrow-dark">SECURE CHECKOUT</span>
+            <h1>Complete your order.</h1>
+            <p>Review your items, choose how to receive them and continue to secure Stripe payment.</p>
+          </div>
+          <a class="back-to-shop" href="/cart"><i class="bi bi-arrow-left" aria-hidden="true"></i> Back to cart</a>
+        </div>
+        <% if (error) { %>
+          <div class="alert alert-<%= status === 503 || status === 502 ? "warning" : "danger" %>" role="alert"><%= error %></div>
+        <% } %>
+        <% if (!stripeConfigured) { %>
+          <div class="alert alert-warning" role="status">Stripe test checkout is not configured yet. Set <code>STRIPE_SECRET_KEY</code> in your local <code>.env</code> file to enable payment.</div>
+        <% } %>
+        <form action="/checkout" method="post" class="checkout-layout">
+          <section class="account-panel checkout-details" aria-labelledby="customerDetailsHeading">
+            <h2 id="customerDetailsHeading">Your details</h2>
+            <div class="row g-3">
+              <div class="col-12">
+                <label class="form-label" for="checkoutName">Full name</label>
+                <input class="form-control" id="checkoutName" name="name" type="text" value="<%= form.name %>" maxlength="100" autocomplete="name" required />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="checkoutPhone">Phone</label>
+                <input class="form-control" id="checkoutPhone" name="phone" type="tel" value="<%= form.phone %>" maxlength="20" autocomplete="tel" placeholder="+971 50 123 4567" required />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="checkoutEmail">Email</label>
+                <input class="form-control" id="checkoutEmail" name="email" type="email" value="<%= form.email %>" maxlength="254" autocomplete="email" required />
+              </div>
+            </div>
+
+            <fieldset class="delivery-options">
+              <legend>Delivery choice</legend>
+              <label class="delivery-choice">
+                <input type="radio" name="deliveryMethod" value="pickup" <%= form.deliveryMethod === "pickup" ? "checked" : "" %> />
+                <span><strong>Pick up in store</strong><small>Free · Fujairah, Al Faseel Building 2</small></span>
+              </label>
+              <label class="delivery-choice">
+                <input type="radio" name="deliveryMethod" value="delivery" <%= form.deliveryMethod === "delivery" ? "checked" : "" %> />
+                <span><strong>Delivery within <%= deliveryArea %></strong><small><%= formatPrice(deliveryFeeFils) %></small></span>
+              </label>
+              <div class="delivery-address-field">
+                <label class="form-label" for="deliveryAddress">Delivery address <span>(required for delivery)</span></label>
+                <textarea class="form-control" id="deliveryAddress" name="deliveryAddress" rows="3" maxlength="300" autocomplete="street-address" placeholder="Building, street and area"><%= form.deliveryAddress %></textarea>
+              </div>
+            </fieldset>
+          </section>
+
+          <aside
+            class="account-panel checkout-summary"
+            data-subtotal-fils="<%= subtotalFils %>"
+            data-delivery-fee-fils="<%= deliveryFeeFils %>"
+          >
+            <h2>Order summary</h2>
+            <ul class="checkout-items">
+              <% items.forEach((item) => { %>
+                <li>
+                  <span><%= item.productName %> × <%= item.quantity %></span>
+                  <strong><%= formatPrice(item.unitPriceFils * item.quantity) %></strong>
+                </li>
+              <% }); %>
+            </ul>
+            <div class="cart-summary-line"><span>Items subtotal</span><strong><%= formatPrice(subtotalFils) %></strong></div>
+            <div class="cart-summary-line"><span>Delivery</span><strong class="checkout-delivery-amount"><%= form.deliveryMethod === "delivery" ? formatPrice(deliveryFeeFils) : "Free" %></strong></div>
+            <div class="cart-summary-line cart-total"><span>Total</span><strong class="checkout-total-amount"><%= formatPrice(totalFils) %></strong></div>
+            <p class="vat-note"><i class="bi bi-check-circle" aria-hidden="true"></i> Product prices include 5% VAT.</p>
+            <button class="btn btn-accent checkout-submit" type="submit" <%= stripeConfigured ? "" : "disabled" %>>
+              <i class="bi bi-lock" aria-hidden="true"></i> Continue to Stripe Checkout
+            </button>
+            <p class="checkout-secure-note">Payment is processed securely on Stripe. Card details are never entered on this site.</p>
+          </aside>
+        </form>
+      </div>
+    </main>
+    <script src="/js/checkout.js" defer></script>
+<%- include("partials/footer") %>

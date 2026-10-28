@@ -1,0 +1,43 @@
+<%- include("partials/header", { title }) %>
+    <main id="main-content" class="account-page">
+      <div class="container">
+        <section class="auth-card tracking-card">
+          <span class="eyebrow eyebrow-dark">REPAIR STATUS</span>
+          <h1>Track your repair.</h1>
+          <p>Enter the ticket number from your confirmation email and the email address used when booking.</p>
+          <% if (error) { %>
+            <div class="alert alert-warning" role="status"><%= error %></div>
+          <% } %>
+          <form action="/track" method="post" class="auth-form">
+            <div class="mb-3">
+              <label class="form-label" for="trackTicket">Ticket number</label>
+              <input class="form-control" id="trackTicket" name="ticketNumber" value="<%= ticketNumber %>" maxlength="100" required />
+            </div>
+            <div class="mb-4">
+              <label class="form-label" for="trackEmail">Email address</label>
+              <input class="form-control" id="trackEmail" name="email" type="email" value="<%= email %>" maxlength="254" autocomplete="email" required />
+            </div>
+            <button class="btn btn-accent auth-submit" type="submit">Find my repair</button>
+          </form>
+          <% if (ticket) {
+            const statusClass = ticket.status === "Completed" ? "status-completed"
+              : ticket.status === "Cancelled" ? "status-cancelled"
+              : ticket.status === "Ready for Pickup" ? "status-ready"
+              : ticket.status === "In Progress" ? "status-progress"
+              : ticket.status === "Waiting for Parts" ? "status-waiting"
+              : "status-received";
+          %>
+            <section class="tracking-result" aria-label="Repair ticket status">
+              <span class="tracking-result-label">Ticket <strong><%= ticket.ticketNumber %></strong></span>
+              <span class="ticket-status <%= statusClass %>"><%= ticket.status %></span>
+              <dl>
+                <div><dt>Device</dt><dd><%= ticket.device %></dd></div>
+                <div><dt>Issue</dt><dd><%= ticket.service %></dd></div>
+                <div><dt>Received</dt><dd><%= new Date(`${ticket.createdAt.replace(" ", "T")}Z`).toLocaleString("en-AE", { dateStyle: "medium", timeZone: "Asia/Dubai" }) %></dd></div>
+              </dl>
+            </section>
+          <% } %>
+        </section>
+      </div>
+    </main>
+<%- include("partials/footer") %>

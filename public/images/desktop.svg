@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="title desc">
+  <title id="title">Desktop computer illustration</title>
+  <desc id="desc">A modern desktop monitor and compact tower with blue accent lighting.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#132944"/>
+      <stop offset="1" stop-color="#0b1728"/>
+    </linearGradient>
+    <linearGradient id="display" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#2581c4"/>
+      <stop offset=".6" stop-color="#173d61"/>
+      <stop offset="1" stop-color="#101e32"/>
+    </linearGradient>
+    <linearGradient id="tower" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#334a64"/>
+      <stop offset="1" stop-color="#17283c"/>
+    </linearGradient>
+    <radialGradient id="glow">
+      <stop stop-color="#14b8a6" stop-opacity=".23"/>
+      <stop offset="1" stop-color="#14b8a6" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="640" height="360" rx="20" fill="url(#background)"/>
+  <circle cx="320" cy="175" r="175" fill="url(#glow)"/>
+  <rect x="106" y="58" width="342" height="218" rx="12" fill="#627a94"/>
+  <rect x="116" y="68" width="322" height="195" rx="6" fill="#091522"/>
+  <path d="M132 84h290v164H132z" fill="url(#display)"/>
+  <path d="M132 215c56-36 107-38 151-10s82 27 139-22v65H132z" fill="#14b8a6" opacity=".26"/>
+  <path d="M132 84h290v4H132z" fill="#b9ddf7" opacity=".25"/>
+  <path d="M260 276h34v42h-34z" fill="#637b95"/>
+  <path d="M232 318h91l14 9H218z" fill="#8ca1b7"/>
+  <rect x="464" y="96" width="83" height="226" rx="12" fill="url(#tower)" stroke="#71869c" stroke-width="2"/>
+  <path d="M480 115h50v4h-50z" fill="#8298ad" opacity=".55"/>
+  <circle cx="505" cy="160" r="27" fill="#101d2c" stroke="#506984" stroke-width="2"/>
+  <circle cx="505" cy="160" r="17" fill="none" stroke="#14b8a6" stroke-width="2" opacity=".8"/>
+  <path d="M505 146v28m-14-14h28m-24-10 20 20m0-20-20 20" stroke="#5eead4" stroke-width="2" opacity=".7"/>
+  <circle cx="529" cy="296" r="4" fill="#14b8a6"/>
+  <ellipse cx="322" cy="333" rx="234" ry="10" fill="#000" opacity=".22"/>
+</svg>

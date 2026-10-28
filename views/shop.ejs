@@ -1,0 +1,86 @@
+<%- include("partials/header", { title }) %>
+    <main id="main-content" class="store-page">
+      <section class="store-hero">
+        <div class="container">
+          <span class="eyebrow eyebrow-dark">THE MASTER SOLUTIONS STORE</span>
+          <div class="store-heading-row">
+            <div>
+              <h1>Find the right tech.</h1>
+              <p>Quality computers, business hardware and everyday essentials.</p>
+            </div>
+            <span class="store-result-count"><%= products.length %> <%= products.length === 1 ? "product" : "products" %></span>
+          </div>
+          <div class="store-controls">
+            <nav class="category-filters" aria-label="Filter products by category">
+              <a class="<%= selectedCategory ? "" : "active" %>" href="/shop" <%= selectedCategory ? "" : 'aria-current="page"' %>>All</a>
+              <% categories.forEach((category) => { %>
+                <a
+                  class="<%= selectedCategory === category ? "active" : "" %>"
+                  href="/shop?category=<%= encodeURIComponent(category) %>"
+                  <%= selectedCategory === category ? 'aria-current="page"' : "" %>
+                ><%= category %></a>
+              <% }); %>
+            </nav>
+            <form class="shop-search" action="/shop" method="get" role="search">
+              <% if (selectedCategory) { %>
+                <input type="hidden" name="category" value="<%= selectedCategory %>" />
+              <% } %>
+              <label class="visually-hidden" for="productSearch">Search products</label>
+              <i class="bi bi-search" aria-hidden="true"></i>
+              <input id="productSearch" type="search" name="search" value="<%= search %>" placeholder="Search products..." />
+              <button type="submit">Search</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section class="store-products-section">
+        <div class="container">
+          <% if (notice) { %>
+            <div class="alert store-alert alert-<%= notice.type %>" role="status"><%= notice.message %></div>
+          <% } %>
+          <% if (products.length) { %>
+            <div class="row g-4 product-grid">
+              <% products.forEach((product) => { %>
+                <div class="col-sm-6 col-lg-4 col-xl-3">
+                  <article class="product-card">
+                    <a class="product-image-link" href="/shop/<%= product.id %>" tabindex="-1" aria-hidden="true">
+                      <img class="product-image" src="<%= product.imageUrl %>" alt="" loading="lazy" />
+                      <span class="product-category"><%= product.category %></span>
+                    </a>
+                    <div class="product-card-body">
+                      <span class="product-brand"><%= product.brand %></span>
+                      <h2><a href="/shop/<%= product.id %>"><%= product.name %></a></h2>
+                      <p class="product-specs"><%= product.specs %></p>
+                      <div class="product-stock <%= product.stock > 0 ? "in-stock" : "out-of-stock" %>">
+                        <span class="stock-dot" aria-hidden="true"></span>
+                        <%= product.stock > 0 ? "In stock" : "Out of stock" %>
+                      </div>
+                      <div class="product-card-bottom">
+                        <span class="product-price"><%= formatPrice(product.priceFils) %></span>
+                        <a class="product-details-link" href="/shop/<%= product.id %>" aria-label="View <%= product.name %> details">
+                          <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+                        </a>
+                      </div>
+                      <form action="/cart/add/<%= product.id %>" method="post">
+                        <button class="btn btn-accent product-add-button" type="submit" <%= product.stock < 1 ? "disabled" : "" %>>
+                          <i class="bi bi-cart-plus" aria-hidden="true"></i> Add to cart
+                        </button>
+                      </form>
+                    </div>
+                  </article>
+                </div>
+              <% }); %>
+            </div>
+          <% } else { %>
+            <div class="empty-store">
+              <span class="empty-store-icon"><i class="bi bi-search" aria-hidden="true"></i></span>
+              <h2>No matching products</h2>
+              <p>Try a different search or browse all of our products.</p>
+              <a class="btn btn-accent" href="/shop">View all products</a>
+            </div>
+          <% } %>
+        </div>
+      </section>
+    </main>
+<%- include("partials/footer") %>
