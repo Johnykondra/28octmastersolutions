@@ -1,14 +1,17 @@
 const { AIProjectClient } = require("@azure/ai-projects");
 const { DefaultAzureCredential } = require("@azure/identity");
 
+const azureIdentitySettingNames = [
+  "AZURE_TENANT_ID",
+  "AZURE_CLIENT_ID",
+  "AZURE_CLIENT_SECRET"
+];
 const azureOpenAISettingNames = [
   "AZURE_OPENAI_ENDPOINT",
   "AZURE_OPENAI_API_KEY",
   "AZURE_OPENAI_DEPLOYMENT"
 ];
 const azureOpenAIApiVersion = process.env.OPENAI_API_VERSION || "2024-10-21";
-const projectEndpoint = process.env.FOUNDRY_PROJECT_ENDPOINT ||
-  "https://johny03shams.services.ai.azure.com/api/projects/proj-default";
 const agentName = process.env.FOUNDRY_AGENT_NAME ||
   "computerandlaptopsalesandserviceagent";
 const assistantInstructions = [
@@ -18,6 +21,16 @@ const assistantInstructions = [
 ].join(" ");
 
 let openAIClient;
+
+function getFoundryConfig() {
+  const endpoint = process.env.FOUNDRY_PROJECT_ENDPOINT;
+  if (!endpoint) return null;
+
+  return {
+    endpoint: endpoint.replace(/\/+$/, ""),
+    agentName
+  };
+}
 
 function getAzureOpenAIConfig() {
   const configuredSettings = azureOpenAISettingNames
@@ -37,11 +50,23 @@ function getAzureOpenAIConfig() {
   };
 }
 
-function getOpenAIClient() {
+function getAzureCredential() {
+  const missingSettings = azureIdentitySettingNames
+    .filter((name) => !process.env[name]);
+  if (process.env.VERCEL && missingSettings.length > 0) {
+    throw new Error(
+      `Azure AI agent authentication is not configured in Vercel: missing ${missingSettings.join(", ")}.`
+    );
+  }
+
+  return new DefaultAzureCredential();
+}
+
+function getOpenAIClient(config) {
   if (!openAIClient) {
     const projectClient = new AIProjectClient(
-      projectEndpoint,
-      new DefaultAzureCredential()
+      config.endpoint,
+      getAzureCredential()
     );
     openAIClient = projectClient.getOpenAIClient();
   }
@@ -96,13 +121,8 @@ async function replyWithAzureOpenAI(conversationMessages, message, config) {
   };
 }
 
-async function reply(conversationId, message, conversationMessages = []) {
-  const azureOpenAIConfig = getAzureOpenAIConfig();
-  if (azureOpenAIConfig) {
-    return replyWithAzureOpenAI(conversationMessages, message, azureOpenAIConfig);
-  }
-
-  const client = getOpenAIClient();
+async function replyWithFoundryAgent(conversationId, message, config) {
+  const client = getOpenAIClient(config);
   let activeConversationId = conversationId;
 
   if (activeConversationId) {
@@ -118,7 +138,7 @@ async function reply(conversationId, message, conversationMessages = []) {
 
   const response = await client.responses.create(
     { conversation: activeConversationId },
-    { body: { agent: { name: agentName, type: "agent_reference" } } }
+    { body: { agent: { name: config.agentName, type: "agent_reference" } } }
   );
 
   if (typeof response.output_text !== "string" || !response.output_text.trim()) {
@@ -131,9 +151,25 @@ async function reply(conversationId, message, conversationMessages = []) {
   };
 }
 
+async function reply(conversationId, message, conversationMessages = []) {
+  const foundryConfig = getFoundryConfig();
+  if (foundryConfig) {
+    return replyWithFoundryAgent(conversationId, message, foundryConfig);
+  }
+
+  const azureOpenAIConfig = getAzureOpenAIConfig();
+  if (azureOpenAIConfig) {
+    return replyWithAzureOpenAI(conversationMessages, message, azureOpenAIConfig);
+  }
+
+  throw new Error(
+    "Missing Azure AI configuration: set FOUNDRY_PROJECT_ENDPOINT or all Azure OpenAI settings."
+  );
+}
+
 function isAuthenticationError(error) {
   const message = error instanceof Error ? error.message : String(error);
-  return /authentication failed|failed to get token|credential unavailable|authenticationerror/i
+  return /authentication failed|authentication is not configured|failed to get token|credential unavailable|authenticationerror/i
     .test(message);
 }
 
